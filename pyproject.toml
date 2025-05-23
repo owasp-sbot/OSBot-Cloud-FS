@@ -1,0 +1,13 @@
+[tool.poetry]
+name        = "osbot_cloud_fs"
+version     = "v0.1.0"
+description = "OSBot-Cloud-FS"
+authors     = ["Dinis Cruz <dinis.cruz@owasp.org>"]
+license     = "Apache 2.0"
+readme      = "README.md"
+homepage    = "https://github.com/owasp-sbot/OSBot-Cloud-FS"
+repository  = "https://github.com/owasp-sbot/OSBot-Cloud-FS"
+
+[tool.poetry.dependencies]
+python            = "^3.12"
+osbot-utils       = "*"
