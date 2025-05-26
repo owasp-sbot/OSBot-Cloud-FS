@@ -10,10 +10,11 @@ from osbot_cloud_fs.core.schemas.Cloud_FS__File__Config import Cloud_FS__File__C
 
 
 class Cloud_FS__File__Metadata(Type_Safe):
-    paths                : Dict[Safe_Id, Safe_Str__File__Path]
-    content_hash         : Safe_Str__Hash                       = None
-    chain_hash           : Safe_Str__Hash                       = None
-    previous_version_path: Safe_Str__File__Path                 = None
+    paths                : Dict[Safe_Id, Safe_Str__File__Path]    # Paths to metadata files
+    content_paths        : Dict[Safe_Id, Safe_Str__File__Path]    # Paths to content files
+    content_hash         : Safe_Str__Hash                        = None
+    chain_hash           : Optional[Safe_Str__Hash]              = None
+    previous_version_path: Optional[Safe_Str__File__Path]        = None
     timestamp            : Timestamp_Now
     file_id              : Random_Guid
     config               : Cloud_FS__File__Config
