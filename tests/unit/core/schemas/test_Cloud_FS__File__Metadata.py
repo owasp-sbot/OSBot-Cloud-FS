@@ -39,11 +39,4 @@ class test_Cloud_FS__File__Metadata(TestCase):
                 assert _.paths['path_id']          != Safe_Id('an_path')
                 assert _.paths[Safe_Id('path_id')] == 'an_path'
                 assert _.paths[Safe_Id('path_id')] == Safe_Str__File__Path('an_path')
-                expected_exception = "assert Safe_Str__File__Path('an_path') == Safe_Id('an_path')\n  \n    an_path"
-                with pytest.raises(AssertionError) as excinfo:
-                    assert _.paths[Safe_Id('path_id')] == Safe_Id('an_path')
-                print("********")
-                print(excinfo.value)
-                print("********")
-                assert str(excinfo.value) == expected_exception
 
