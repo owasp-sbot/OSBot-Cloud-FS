@@ -1,6 +1,6 @@
 [tool.poetry]
 name        = "osbot_cloud_fs"
-version     = "v0.1.2"
+version     = "v0.1.3"
 description = "OSBot-Cloud-FS"
 authors     = ["Dinis Cruz <dinis.cruz@owasp.org>"]
 license     = "Apache 2.0"
