@@ -1,7 +1,7 @@
 from enum import Enum
 
 
-class Cloud_FS__File__Content_Type(Enum):
+class Enum__Cloud_FS__File__Content_Type(Enum):
     HTML       : str = 'text/html; charset=utf-8'
     JSON       : str = 'application/json; charset=utf-8'
     MARKDOWN   : str = "text/markdown"                          # question: should we add charset=utf-8 here?

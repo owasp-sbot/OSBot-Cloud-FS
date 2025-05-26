@@ -2,11 +2,11 @@ from typing                                                         import Dict,
 from osbot_utils.helpers.Safe_Id                                    import Safe_Id
 from osbot_utils.helpers.safe_str.Safe_Str__File__Path              import Safe_Str__File__Path
 from osbot_utils.type_safe.Type_Safe                                import Type_Safe
-from osbot_cloud_fs.core.schemas.Cloud_FS__File                     import Cloud_FS__File
+from osbot_cloud_fs.core.schemas.Schema__Cloud_FS__File             import Schema__Cloud_FS__File
 
 
 class Cloud_FS__Memory__File_System(Type_Safe):                                                # In-memory file system that maintains directory structure and file storage
-    files        : Dict[Safe_Str__File__Path, Cloud_FS__File]                                  # Path -> File metadata mapping
+    files        : Dict[Safe_Str__File__Path, Schema__Cloud_FS__File]                                  # Path -> File metadata mapping
     content_data : Dict[Safe_Str__File__Path, bytes]                                           # Path -> Raw content mapping
 
     def exists(self, path : Safe_Str__File__Path                                               # Check if a file exists at the given path
@@ -18,7 +18,7 @@ class Cloud_FS__Memory__File_System(Type_Safe):                                 
         return path in self.content_data
 
     def save(self, path : Safe_Str__File__Path ,                                               # Save a file metadata at the given path
-                   file : Cloud_FS__File
+                   file : Schema__Cloud_FS__File
               ) -> bool:
         self.files[path] = file                                                                # Store the file metadata
         return True
@@ -30,7 +30,7 @@ class Cloud_FS__Memory__File_System(Type_Safe):                                 
         return True
 
     def load(self, path : Safe_Str__File__Path                                                 # Load a file metadata from the given path
-              ) -> Optional[Cloud_FS__File]:
+              ) -> Optional[Schema__Cloud_FS__File]:
         return self.files.get(path)
 
     def load_content(self, path : Safe_Str__File__Path                                         # Load raw content from the given path

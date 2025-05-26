@@ -1,7 +1,7 @@
 from enum import Enum
 
 
-class Cloud_FS__File__Encoding(Enum):
+class Enum__Cloud_FS__File__Encoding(Enum):
     UTF_8        = "utf-8"
     UTF_16       = "utf-16"
     UTF_16_BE    = "utf-16-be"

@@ -1,18 +1,18 @@
-from unittest                                                      import TestCase
-from osbot_utils.type_safe.Type_Safe__Dict                         import Type_Safe__Dict
-from osbot_utils.helpers.Safe_Id                                   import Safe_Id
-from osbot_utils.helpers.safe_str.Safe_Str__File__Path             import Safe_Str__File__Path
-from osbot_utils.helpers.safe_str.Safe_Str__File__Name             import Safe_Str__File__Name
-from osbot_utils.helpers.safe_str.Safe_Str__Hash                   import safe_str_hash
-from osbot_utils.helpers.safe_int.Safe_UInt__FileSize              import Safe_UInt__FileSize
-from osbot_cloud_fs.core.memory.Cloud_FS__Memory__File_System      import Cloud_FS__Memory__File_System
-from osbot_cloud_fs.core.schemas.Cloud_FS__File                    import Cloud_FS__File
-from osbot_cloud_fs.core.schemas.Cloud_FS__File__Config            import Cloud_FS__File__Config
-from osbot_cloud_fs.core.schemas.Cloud_FS__File__Content           import Cloud_FS__File__Content
-from osbot_cloud_fs.core.schemas.Cloud_FS__File__Content_Type      import Cloud_FS__File__Content_Type
-from osbot_cloud_fs.core.schemas.Cloud_FS__File__Encoding          import Cloud_FS__File__Encoding
-from osbot_cloud_fs.core.schemas.Cloud_FS__File__Info              import Cloud_FS__File__Info
-from osbot_cloud_fs.core.schemas.Cloud_FS__File__Metadata          import Cloud_FS__File__Metadata
+from unittest                                                       import TestCase
+from osbot_utils.type_safe.Type_Safe__Dict                          import Type_Safe__Dict
+from osbot_utils.helpers.Safe_Id                                    import Safe_Id
+from osbot_utils.helpers.safe_str.Safe_Str__File__Path              import Safe_Str__File__Path
+from osbot_utils.helpers.safe_str.Safe_Str__File__Name              import Safe_Str__File__Name
+from osbot_utils.helpers.safe_str.Safe_Str__Hash                    import safe_str_hash
+from osbot_utils.helpers.safe_int.Safe_UInt__FileSize               import Safe_UInt__FileSize
+from osbot_cloud_fs.core.memory.Cloud_FS__Memory__File_System       import Cloud_FS__Memory__File_System
+from osbot_cloud_fs.core.schemas.Schema__Cloud_FS__File             import Schema__Cloud_FS__File
+from osbot_cloud_fs.core.schemas.Schema__Cloud_FS__File__Config     import Schema__Cloud_FS__File__Config
+from osbot_cloud_fs.core.schemas.Schema__Cloud_FS__File__Content    import Schema__Cloud_FS__File__Content
+from osbot_cloud_fs.core.schemas.Enum__Cloud_FS__File__Content_Type import Enum__Cloud_FS__File__Content_Type
+from osbot_cloud_fs.core.schemas.Enum__Cloud_FS__File__Encoding     import Enum__Cloud_FS__File__Encoding
+from osbot_cloud_fs.core.schemas.Schema__Cloud_FS__File__Info       import Schema__Cloud_FS__File__Info
+from osbot_cloud_fs.core.schemas.Schema__Cloud_FS__File__Metadata   import Schema__Cloud_FS__File__Metadata
 
 
 class test_Cloud_FS__Memory__File_System(TestCase):
@@ -24,21 +24,21 @@ class test_Cloud_FS__Memory__File_System(TestCase):
         self.test_content_bytes = b"test content"
 
         # Create file components according to new schema
-        self.test_file_content = Cloud_FS__File__Content(size         = Safe_UInt__FileSize(len(self.test_content_bytes)),
-                                                         encoding     = Cloud_FS__File__Encoding.UTF_8                   ,
-                                                         content_path = self.test_content_path                           )
-        self.test_file_info    = Cloud_FS__File__Info   (file_name    = Safe_Str__File__Name("file.json"),
-                                                         file_ext     = Safe_Id             ("json"     ),
-                                                         content_type = Cloud_FS__File__Content_Type.JSON,
-                                                         content      = self.test_file_content           )
-        self.test_config      = Cloud_FS__File__Config  ()
-        self.test_metadata    = Cloud_FS__File__Metadata(paths         = {Safe_Id("test"): self.test_path},
-                                                         content_paths = {Safe_Id("test"): self.test_content_path},
-                                                         content_hash  = safe_str_hash("test content"   ),
-                                                         config        = self.test_config               )
-        self.test_file       = Cloud_FS__File           (config        = self.test_config               ,
-                                                         info          = self.test_file_info            ,
-                                                         metadata      = self.test_metadata             )
+        self.test_file_content = Schema__Cloud_FS__File__Content(size         = Safe_UInt__FileSize(len(self.test_content_bytes)),
+                                                                 encoding     = Enum__Cloud_FS__File__Encoding.UTF_8,
+                                                                 content_path = self.test_content_path)
+        self.test_file_info    = Schema__Cloud_FS__File__Info   (file_name    = Safe_Str__File__Name("file.json"),
+                                                                 file_ext     = Safe_Id             ("json"     ),
+                                                                 content_type = Enum__Cloud_FS__File__Content_Type.JSON,
+                                                                 content      = self.test_file_content)
+        self.test_config      = Schema__Cloud_FS__File__Config  ()
+        self.test_metadata    = Schema__Cloud_FS__File__Metadata(paths         = {Safe_Id("test"): self.test_path},
+                                                                 content_paths = {Safe_Id("test"): self.test_content_path},
+                                                                 content_hash  = safe_str_hash("test content"   ),
+                                                                 config        = self.test_config)
+        self.test_file       = Schema__Cloud_FS__File           (config        = self.test_config,
+                                                                 info          = self.test_file_info,
+                                                                 metadata      = self.test_metadata)
 
     def test_init(self):                                                                         # Tests basic initialization
         assert type(self.file_system             ) is Cloud_FS__Memory__File_System
@@ -167,31 +167,31 @@ class test_Cloud_FS__Memory__File_System(TestCase):
         content_1 = b"short"
         content_2 = b"much longer content"
 
-        file_content_1 = Cloud_FS__File__Content(size         = Safe_UInt__FileSize(len(content_1)),
-                                                 encoding     = Cloud_FS__File__Encoding.UTF_8,
-                                                 content_path = Safe_Str__File__Path("dir1/file1.txt"))
+        file_content_1 = Schema__Cloud_FS__File__Content(size         = Safe_UInt__FileSize(len(content_1)),
+                                                         encoding     = Enum__Cloud_FS__File__Encoding.UTF_8,
+                                                         content_path = Safe_Str__File__Path("dir1/file1.txt"))
 
-        file_content_2 = Cloud_FS__File__Content(size         = len(content_2),
-                                                 encoding     = Cloud_FS__File__Encoding.UTF_8,
-                                                 content_path = "dir2/file2.txt")
+        file_content_2 = Schema__Cloud_FS__File__Content(size         = len(content_2),
+                                                         encoding     = Enum__Cloud_FS__File__Encoding.UTF_8,
+                                                         content_path = "dir2/file2.txt")
 
-        file_info_1 = Cloud_FS__File__Info(file_name    = Safe_Str__File__Name("file1.txt"),
-                                           file_ext     = Safe_Id("txt"),
-                                           content_type = Cloud_FS__File__Content_Type.TXT,
-                                           content      = file_content_1)
+        file_info_1 = Schema__Cloud_FS__File__Info(file_name    = Safe_Str__File__Name("file1.txt"),
+                                                   file_ext     = Safe_Id("txt"),
+                                                   content_type = Enum__Cloud_FS__File__Content_Type.TXT,
+                                                   content      = file_content_1)
 
-        file_info_2 = Cloud_FS__File__Info(file_name    = "file2.txt",
-                                           file_ext     = "txt",
-                                           content_type = Cloud_FS__File__Content_Type.TXT,
-                                           content      = file_content_2)
+        file_info_2 = Schema__Cloud_FS__File__Info(file_name    ="file2.txt",
+                                                   file_ext     = "txt",
+                                                   content_type = Enum__Cloud_FS__File__Content_Type.TXT,
+                                                   content      = file_content_2)
 
-        file_1 = Cloud_FS__File(config   = self.test_config,
-                                info     = file_info_1,
-                                metadata = self.test_metadata)
+        file_1 = Schema__Cloud_FS__File(config   = self.test_config,
+                                        info     = file_info_1,
+                                        metadata = self.test_metadata)
 
-        file_2 = Cloud_FS__File(config   = self.test_config,
-                                info     = file_info_2,
-                                metadata = self.test_metadata)
+        file_2 = Schema__Cloud_FS__File(config   = self.test_config,
+                                        info     = file_info_2,
+                                        metadata = self.test_metadata)
 
         self.file_system.save        (Safe_Str__File__Path("dir1/file1.txt.json"), file_1)
         self.file_system.save        (Safe_Str__File__Path("dir2/file2.txt.json"), file_2)
@@ -213,6 +213,6 @@ class test_Cloud_FS__Memory__File_System(TestCase):
 
     def test__bug__filename_should_not_have_extension(self):
         with self.test_file_info as _:
-            assert type(_) is Cloud_FS__File__Info
+            assert type(_) is Schema__Cloud_FS__File__Info
             assert type(_.file_name) is     Safe_Str__File__Name            # BUG: this supports . (dots) in the file name
             assert type(_.file_name) is not Safe_Id                         # BUG: it is probably better to only allow filenames to be Safe_Id (which only supports r'[^a-zA-Z0-9_-]' )

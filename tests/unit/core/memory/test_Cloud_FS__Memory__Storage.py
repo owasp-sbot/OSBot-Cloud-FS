@@ -1,32 +1,29 @@
-from datetime import datetime
-from unittest                                                      import TestCase
-
-from osbot_utils.utils.Dev import pprint
-
-from osbot_utils.helpers.Safe_Id                                   import Safe_Id
-from osbot_utils.helpers.safe_str.Safe_Str__File__Path             import Safe_Str__File__Path
-from osbot_utils.helpers.safe_str.Safe_Str__Hash                   import safe_str_hash
-from osbot_cloud_fs.core.memory.Cloud_FS__Memory__File_System      import Cloud_FS__Memory__File_System
-from osbot_cloud_fs.core.memory.Cloud_FS__Memory__Storage          import Cloud_FS__Memory__Storage
-from osbot_cloud_fs.core.schemas.Cloud_FS__File                    import Cloud_FS__File
-from osbot_cloud_fs.core.schemas.Cloud_FS__File__Config            import Cloud_FS__File__Config
-from osbot_cloud_fs.core.schemas.Cloud_FS__File__Content_Type      import Cloud_FS__File__Content_Type
-from osbot_cloud_fs.core.schemas.Cloud_FS__Path__Handler           import Cloud_FS__Path__Handler
+from datetime                                                       import datetime
+from unittest                                                       import TestCase
+from osbot_utils.helpers.Safe_Id                                    import Safe_Id
+from osbot_utils.helpers.safe_str.Safe_Str__File__Path              import Safe_Str__File__Path
+from osbot_utils.helpers.safe_str.Safe_Str__Hash                    import safe_str_hash
+from osbot_cloud_fs.core.memory.Cloud_FS__Memory__File_System       import Cloud_FS__Memory__File_System
+from osbot_cloud_fs.core.memory.Cloud_FS__Memory__Storage           import Cloud_FS__Memory__Storage
+from osbot_cloud_fs.core.schemas.Schema__Cloud_FS__File             import Schema__Cloud_FS__File
+from osbot_cloud_fs.core.schemas.Schema__Cloud_FS__File__Config     import Schema__Cloud_FS__File__Config
+from osbot_cloud_fs.core.schemas.Enum__Cloud_FS__File__Content_Type import Enum__Cloud_FS__File__Content_Type
+from osbot_cloud_fs.core.schemas.Schema__Cloud_FS__Path__Handler    import Schema__Cloud_FS__Path__Handler
 
 
 class test_Cloud_FS__Memory__Storage(TestCase):
 
     def setUp(self):                                                                             # Initialize test data
         self.file_system      = Cloud_FS__Memory__File_System()
-        self.latest_handler   = Cloud_FS__Path__Handler  (name          = Safe_Id("latest"),
-                                                          priority      = 10,
-                                                          enabled       = True)
-        self.temporal_handler = Cloud_FS__Path__Handler  (name          = Safe_Id("temporal"),
-                                                          priority      = 5,
-                                                          enabled       = True)
+        self.latest_handler   = Schema__Cloud_FS__Path__Handler  (name          = Safe_Id("latest"),
+                                                                  priority      = 10,
+                                                                  enabled       = True)
+        self.temporal_handler = Schema__Cloud_FS__Path__Handler  (name          = Safe_Id("temporal"),
+                                                                  priority      = 5,
+                                                                  enabled       = True)
         self.storage          = Cloud_FS__Memory__Storage(file_system   = self.file_system,
                                                           path_handlers = [self.latest_handler, self.temporal_handler])
-        self.test_config      = Cloud_FS__File__Config    (areas = [Safe_Id("test"), Safe_Id("area")])
+        self.test_config      = Schema__Cloud_FS__File__Config    (areas = [Safe_Id("test"), Safe_Id("area")])
         self.test_data        = "test content"
 
     def test_init(self):                                                                         # Tests basic initialization
@@ -75,15 +72,15 @@ class test_Cloud_FS__Memory__Storage(TestCase):
         saved_paths = self.storage.save(
             self.test_data,
             self.test_config,
-            Cloud_FS__File__Content_Type.MARKDOWN
+            Enum__Cloud_FS__File__Content_Type.MARKDOWN
         )
 
         loaded_file = self.file_system.load(saved_paths[Safe_Id("latest")])
-        assert loaded_file.info.content_type == Cloud_FS__File__Content_Type.MARKDOWN
+        assert loaded_file.info.content_type == Enum__Cloud_FS__File__Content_Type.MARKDOWN
 
     def test_save_with_custom_paths(self):                                                       # Tests saving with custom paths in config
         custom_path = Safe_Str__File__Path("custom/location/file.json")
-        config = Cloud_FS__File__Config(custom_paths = {Safe_Id("custom"): custom_path})
+        config = Schema__Cloud_FS__File__Config(custom_paths = {Safe_Id("custom"): custom_path})
 
         saved_paths = self.storage.save(self.test_data, config)
 
@@ -95,7 +92,7 @@ class test_Cloud_FS__Memory__Storage(TestCase):
         saved_paths = self.storage.save(self.test_data, self.test_config)
         loaded_file = self.storage.load(self.test_config)
 
-        assert type(loaded_file) is Cloud_FS__File
+        assert type(loaded_file) is Schema__Cloud_FS__File
         assert loaded_file.info.content.size == len(self.test_data)
         assert loaded_file.metadata.content_hash == safe_str_hash(self.test_data)
 
@@ -178,8 +175,8 @@ class test_Cloud_FS__Memory__Storage(TestCase):
         assert type(paths[Safe_Id("temporal")]) is Safe_Str__File__Path
 
     def test_list_files(self):                                                                   # Tests listing files
-        config_1 = Cloud_FS__File__Config(areas = [Safe_Id("area1")])
-        config_2 = Cloud_FS__File__Config(areas = [Safe_Id("area2")])
+        config_1 = Schema__Cloud_FS__File__Config(areas = [Safe_Id("area1")])
+        config_2 = Schema__Cloud_FS__File__Config(areas = [Safe_Id("area2")])
 
         self.storage.save("content1", config_1)
         self.storage.save("content2", config_2)
@@ -195,7 +192,7 @@ class test_Cloud_FS__Memory__Storage(TestCase):
                              f'{time_path}/area2/file.json']                                    #       caused by the fact that the latest value has been overwritten
 
     def test_add_path_handler(self):                                                            # Tests adding path handlers
-        new_handler = Cloud_FS__Path__Handler(name = Safe_Id("versioned"))
+        new_handler = Schema__Cloud_FS__Path__Handler(name = Safe_Id("versioned"))
 
         assert len(self.storage.path_handlers) == 2
 
@@ -213,7 +210,7 @@ class test_Cloud_FS__Memory__Storage(TestCase):
 
     def test_clear(self):                                                                        # Tests clearing storage
         self.storage.save("content1", self.test_config)
-        self.storage.save("content2", Cloud_FS__File__Config())
+        self.storage.save("content2", Schema__Cloud_FS__File__Config())
 
         assert len(self.storage.list_files()) > 0
         assert len(self.file_system.content_data) > 0
@@ -225,7 +222,7 @@ class test_Cloud_FS__Memory__Storage(TestCase):
 
     def test_stats(self):                                                                        # Tests storage statistics
         self.storage.save("short content", self.test_config)
-        self.storage.save("much longer content", Cloud_FS__File__Config())
+        self.storage.save("much longer content", Schema__Cloud_FS__File__Config())
 
         stats = self.storage.stats()
 
@@ -245,10 +242,10 @@ class test_Cloud_FS__Memory__Storage(TestCase):
         assert Safe_Id("temporal") not in saved_paths
 
     def test_handler_path_generation(self):                                                     # Tests different handler path generation
-        versioned_handler = Cloud_FS__Path__Handler(name = Safe_Id("versioned"))
+        versioned_handler = Schema__Cloud_FS__Path__Handler(name = Safe_Id("versioned"))
         self.storage.add_path_handler(versioned_handler)
 
-        config = Cloud_FS__File__Config(version = 2)
+        config = Schema__Cloud_FS__File__Config(version = 2)
         saved_paths = self.storage.save(self.test_data, config)
 
         assert Safe_Id("versioned") in saved_paths
