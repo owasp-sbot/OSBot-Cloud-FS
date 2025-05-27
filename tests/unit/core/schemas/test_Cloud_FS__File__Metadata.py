@@ -20,12 +20,10 @@ class test_Cloud_FS__File__Metadata(TestCase):
                                  content_paths         = __(),
                                  timestamp             = _.timestamp,
                                  file_id               = _.file_id,
-                                 config                =__(version           = 1    ,
-                                                           enable_versioning = True ,
-                                                           enable_latest     = True ,
-                                                           areas             = []   ,
-                                                           custom_paths      = __() ,
-                                                           tags              = []   ))
+                                 config                =__(default_handler = None ,
+                                                           path_handlers   = []   ,
+                                                           file_type       = None ,
+                                                           tags            = []  ))
 
             kwargs = dict(paths = {"path_id":"an_path"})
             with Schema__Cloud_FS__File__Metadata(**kwargs) as _:

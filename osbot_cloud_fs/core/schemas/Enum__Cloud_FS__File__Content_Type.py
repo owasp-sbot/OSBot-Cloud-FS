@@ -1,9 +1,9 @@
 from enum import Enum
 
-
 class Enum__Cloud_FS__File__Content_Type(Enum):
     HTML       : str = 'text/html; charset=utf-8'
     JSON       : str = 'application/json; charset=utf-8'
+    JPEG       : str = 'image/jpeg'
     MARKDOWN   : str = "text/markdown"                          # question: should we add charset=utf-8 here?
     DOT        : str = "text/vnd.graphviz"                      # and here?
     PNG        : str = 'image/png'
